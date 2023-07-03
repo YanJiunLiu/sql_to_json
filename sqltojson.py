@@ -2,6 +2,7 @@ import re
 import json
 
 SQL_files = ["reads_summary_atg_20230619.sql", "hospital_atg_20230619.sql", "reads_summary_WES_summary_20230117.sql"]
+SQL_files = ["sql/hospital_atg_20230619.sql"]
 # 開始讀取SQL檔案
 all_data = {}
 for j, SQL_file in enumerate(SQL_files):
@@ -14,7 +15,7 @@ for j, SQL_file in enumerate(SQL_files):
                 create_table_match = re.search(r'^CREATE TABLE', statement, re.MULTILINE)
                 if create_table_match:
                     table_name = re.findall(r'\`\w+\`', statement)[0].strip('`')
-                    columns_matches = re.findall(r'\`\w+\` \w+\(\d+\)|\`\w+\` double|\`\w+\` text|\`\w+\` float', statement)
+                    columns_matches = re.findall(r'\`[\w\.]+\` \w+\(\d+\)|\`[\w\.]+\` double|\`[\w\.]+\` text|\`[\w\.]+\` float|\`[\w\.]+\` int|\`[\w\.]+\` datetime|\`[\w\.]+\` smallint|\`[\w\.]+\` date|\`[\w\.]+\` mediumtext', statement)
                     col_info = [(col.split(' ')[0].strip('`'), col.split(' ')[1]) for col in columns_matches]
 
                 insert_into_match = re.search(r'^INSERT INTO ', statement, re.MULTILINE)
