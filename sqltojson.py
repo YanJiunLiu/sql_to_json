@@ -3,10 +3,10 @@ import json
 
 SQL_files = ["reads_summary_atg_20230619.sql", "hospital_atg_20230619.sql", "reads_summary_WES_summary_20230117.sql"]
 # 開始讀取SQL檔案
+all_data = {}
 for j, SQL_file in enumerate(SQL_files):
     with open(SQL_file, 'r') as file:
         statement = ''
-        all_data = {}
         for i, line in enumerate(file):
             line = line.strip()
             if line.endswith(');') or line.endswith('/;') or line.endswith('\';') or line.endswith('/;'):
