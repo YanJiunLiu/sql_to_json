@@ -2,7 +2,7 @@ import re
 import json
 
 SQL_files = ["reads_summary_atg_20230619.sql", "hospital_atg_20230619.sql", "reads_summary_WES_summary_20230117.sql"]
-SQL_files = ["sql/hospital_atg_20230619.sql"]
+# SQL_files = ["sql/hospital_atg_20230619.sql"]
 # 開始讀取SQL檔案
 all_data = {}
 for j, SQL_file in enumerate(SQL_files):
@@ -38,7 +38,7 @@ for j, SQL_file in enumerate(SQL_files):
                         print(f"資料長度：{len(values)}")
                         if len(col_info) != len(values):
                             with open(f'error-{j}.txt', 'a+') as file:
-                                file.write(f"{match}\n")
+                                file.write(f"{table_name}:{match}\n")
                             continue
                         for i, (col_name, col_type) in enumerate(col_info):
                             if 'int' in col_type:
