@@ -46,7 +46,7 @@ def main():
     print("检查路径！")
     csv_files = glob.glob(os.path.join(csv_dir, "*.csv"))
 
-    batch_size = 1000  # 每次处理的行数
+    batch_size = 1  # 每次处理的行数
     start_index = 0
     while start_index < len(csv_files):
         batch_files = csv_files[start_index:start_index+batch_size]
