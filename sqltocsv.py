@@ -69,7 +69,7 @@ if __name__ == '__main__':
     #     sql_script = sqlfile.read()
     #     cursor.execute(sql_script)
     #
-    cursor.execute("SELECT * FROM sample")
+    cursor.execute("SELECT * FROM sample;")
     rows = cursor.fetchall()
     print(f"读取SQL文件并执行查询")
     print(f"cursor數值 {cursor}")
