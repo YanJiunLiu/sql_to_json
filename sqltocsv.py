@@ -53,9 +53,6 @@ if __name__ == '__main__':
         'database': 'hospital_atg'
     }
 
-    sql_file_path = 'sql/hospital_atg_20230619.sql'  # 替换为您的SQL文件路径
-    csv_file_path = 'data.csv'  # 替换为输出的CSV文件路径
-
     # 连接到MySQL数据库
     conn = mysql.connector.connect(**config)
     if conn.is_connected():
@@ -70,24 +67,17 @@ if __name__ == '__main__':
 
     # 打印表名
     for table in tables:
-        print(table[0])
-    # cursor.execute("SELECT * FROM hospital_atg.sample;")
-    # rows = cursor.fetchall()
-    # print(f"读取SQL文件并执行查询")
-    # print(f"cursor數值 {cursor}")
-
-    # 获取查询结果的列名
-    # print(f"cursor.description {cursor.description}")
-    # column_names = [desc[0] for desc in cursor.description]
-    # print(f"获取查询结果的列名 {column_names}")
-    # # 将数据写入CSV文件
-    # with open(csv_file_path, 'w', newline='') as csvfile:
-    #     writer = csv.writer(csvfile)
-    #     writer.writerow(column_names)
-    #     writer.writerows(rows)
+        csv_file_path = f'csv/{table[0]}.csv'  # 替换为输出的CSV文件路径
+        print(f"查询{table[0]}")
+        cursor.execute(f"SELECT * FROM {table[0]};")
+        rows = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        print(f"寫入 csv/{table[0]}.csv")
+        with open(csv_file_path, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(column_names)
+            writer.writerows(rows)
 
     cursor.close()
     conn.close()
     print("转换完成！")
-
-
