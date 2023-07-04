@@ -21,7 +21,7 @@ def csv_to_json(csv_file_path: str):
 
 def load_json(json_file_path, data):
     with open(json_file_path, 'a') as jsonfile:
-        jsonfile.write(f"\t\t{json.dumps(data)},")
+        jsonfile.write(f"\t\t{json.dumps(data)}")
 
 
 def main():
@@ -43,9 +43,12 @@ def main():
         tranform = csv_to_json(csv_file_path)
         value = next(tranform, None)
         while value:
-            load_json(json_file_path, value)
+            tmp = value
             value = next(tranform, None)
-
+            if value:
+                load_json(json_file_path, f"{tmp},")
+            else:
+                load_json(json_file_path, f"{tmp}")
         with open(json_file_path, 'a') as jsonfile:
             jsonfile.write("\t\n]")
             jsonfile.write("\n}")
