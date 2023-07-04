@@ -83,9 +83,10 @@ if __name__ == '__main__':
     with open(csv_file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(column_names)
-        writer.writerows(rows)
+        writer.writerows(cursor)
 
+    cursor.close()
+    conn.close()
     print("转换完成！")
-
 
 
