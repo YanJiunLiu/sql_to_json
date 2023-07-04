@@ -65,13 +65,14 @@ if __name__ == '__main__':
     cursor = conn.cursor()
     print(f"cursor數值 {cursor}")
     # 读取SQL文件并执行查询
-    with open(sql_file_path, 'r') as sqlfile:
-        sql_script = sqlfile.read()
-        cursor.execute(sql_script)
-        rows = cursor.fetchall()
+    # with open(sql_file_path, 'r') as sqlfile:
+    #     sql_script = sqlfile.read()
+    #     cursor.execute(sql_script)
+    #     rows = cursor.fetchall()
+    cursor.execute("SELECT * FROM sample")
     print(f"读取SQL文件并执行查询")
     print(f"cursor數值 {cursor}")
-    print(f"rows {rows}")
+    # print(f"rows {rows}")
 
     # 获取查询结果的列名
     print(f"cursor.description {cursor.description}")
