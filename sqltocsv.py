@@ -64,27 +64,27 @@ if __name__ == '__main__':
         raise ConnectionError("MySQL连接失败")
     cursor = conn.cursor()
     print(f"cursor數值 {cursor}")
-    # 读取SQL文件并执行查询
-    # with open(sql_file_path, 'r') as sqlfile:
-    #     sql_script = sqlfile.read()
-    #     cursor.execute(sql_script)
-    #
-    cursor.execute("SELECT * FROM hospital_atg.sample;")
-    rows = cursor.fetchall()
-    print(f"读取SQL文件并执行查询")
-    print(f"cursor數值 {cursor}")
-    print(f"rows數值 {rows}")
-    print(f"行数: {cursor.rowcount}")
+    # 执行查询获取所有表名
+    cursor.execute("SHOW TABLES;")
+    tables = cursor.fetchall()
+
+    # 打印表名
+    for table in tables:
+        print(table[0])
+    # cursor.execute("SELECT * FROM hospital_atg.sample;")
+    # rows = cursor.fetchall()
+    # print(f"读取SQL文件并执行查询")
+    # print(f"cursor數值 {cursor}")
 
     # 获取查询结果的列名
-    print(f"cursor.description {cursor.description}")
-    column_names = [desc[0] for desc in cursor.description]
-    print(f"获取查询结果的列名 {column_names}")
-    # 将数据写入CSV文件
-    with open(csv_file_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(column_names)
-        writer.writerows(cursor)
+    # print(f"cursor.description {cursor.description}")
+    # column_names = [desc[0] for desc in cursor.description]
+    # print(f"获取查询结果的列名 {column_names}")
+    # # 将数据写入CSV文件
+    # with open(csv_file_path, 'w', newline='') as csvfile:
+    #     writer = csv.writer(csvfile)
+    #     writer.writerow(column_names)
+    #     writer.writerows(rows)
 
     cursor.close()
     conn.close()
