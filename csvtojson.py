@@ -37,11 +37,12 @@ def main():
         key = os.path.basename(csv_file_path).replace("hospital_atg_", "").replace(".csv", "")
         json_data[key] = []
         print(f"csv to json: {key} 讀取資料")
-        value = next(csv_to_json(csv_file_path))
+        tranform = csv_to_json(csv_file_path)
+        value = next(tranform)
         while value:
             print(value)
             json_data[key].append(value)
-            value = next(csv_to_json(csv_file_path))
+            value = next(tranform)
 
         print(f"csv to json: {key} 轉換完成")
     load_json(output_json, json_data)
