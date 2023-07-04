@@ -38,11 +38,11 @@ def main():
         json_data[key] = []
         print(f"csv to json: {key} 讀取資料")
         tranform = csv_to_json(csv_file_path)
-        value = next(tranform)
+        value = next(tranform, None)
         while value:
             print(value)
             json_data[key].append(value)
-            value = next(tranform)
+            value = next(tranform, None)
 
         print(f"csv to json: {key} 轉換完成")
     load_json(output_json, json_data)
