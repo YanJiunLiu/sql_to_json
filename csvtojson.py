@@ -19,9 +19,9 @@ def csv_to_json(csv_file_path: str):
             yield row
 
 
-def load_json(json_file_path, data):
+def load_json(json_file_path, data, comma=","):
     with open(json_file_path, 'a') as jsonfile:
-        jsonfile.write(f"\t\t{json.dumps(data)}")
+        jsonfile.write(f"\t\t{json.dumps(data)}{comma}")
 
 
 def main():
@@ -46,9 +46,9 @@ def main():
             tmp = value
             value = next(tranform, None)
             if value:
-                load_json(json_file_path, f"{tmp},")
-            else:
                 load_json(json_file_path, f"{tmp}")
+            else:
+                load_json(json_file_path, f"{tmp}", comma="")
         with open(json_file_path, 'a') as jsonfile:
             jsonfile.write("\t\n]")
             jsonfile.write("\n}")
