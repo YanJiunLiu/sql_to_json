@@ -44,7 +44,7 @@ def main():
             value = next(tranform, None)
 
         print(f"csv to json: {key} 轉換完成")
-    load_json(output_json, json_data)
+        load_json(f"json/{key}.json", json_data)
     print("转换完成！")
 
 
