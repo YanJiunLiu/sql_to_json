@@ -74,6 +74,7 @@ if __name__ == '__main__':
     print(f"读取SQL文件并执行查询")
     print(f"cursor數值 {cursor}")
     print(f"rows數值 {rows}")
+    print(f"行数: {cursor.rowcount}")
 
     # 获取查询结果的列名
     print(f"cursor.description {cursor.description}")
