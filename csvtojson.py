@@ -21,7 +21,7 @@ def csv_to_json(csv_file_path: str):
 
 def load_json(json_file_path, data):
     with open(json_file_path, 'a') as jsonfile:
-        jsonfile.write(f"\t\t{json.dumps(data)}")
+        jsonfile.write(f"\t\t{json.dumps(data)},")
 
 
 def main():
