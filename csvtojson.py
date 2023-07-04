@@ -40,7 +40,6 @@ def main():
         tranform = csv_to_json(csv_file_path)
         value = next(tranform, None)
         while value:
-            print(value)
             json_data[key].append(value)
             value = next(tranform, None)
 
