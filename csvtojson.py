@@ -20,7 +20,7 @@ def csv_to_json(csv_file_path: str):
 
 
 def load_json(json_file_path, data):
-    with open(json_file_path, 'w') as jsonfile:
+    with open(json_file_path, 'a') as jsonfile:
         jsonfile.write(json.dumps(data))
 
 
@@ -37,14 +37,17 @@ def main():
         print(f"csv to json: {key} 讀取資料")
 
         json_file_path = f"json/{key}.json"
+
         with open(json_file_path, 'a') as jsonfile:
             jsonfile.write("{\n")
             jsonfile.write(f"\t\"{key}\":[\n")
         tranform = csv_to_json(csv_file_path)
         value = next(tranform, None)
         while value:
-            value = next(tranform, None)
+            print(value)
             load_json(json_file_path, value)
+            value = next(tranform, None)
+
         with open(json_file_path, 'a') as jsonfile:
             jsonfile.write("\n]")
             jsonfile.write("\n}")
