@@ -16,14 +16,12 @@ class MyDict(Dict):
         reg_complier = re.compile(r'>>>[\w\W\.]+<<<')
         assert reg_complier.match(extra_string), "Your extra_string doesn`t match {{\w+\.\w+}}"
         variables = re.findall(r'{{\w+\.\w+}}', extra_string)
-        print(f"extra_string::{extra_string}")
         for var in variables:
             extra_value = self.extra_get(extra_string=var, index=index)
             if isinstance(extra_value, str):
                 extra_value = "'" + extra_value + "'"
             extra_string = extra_string.replace(var, extra_value)
         execute_string = extra_string.replace(">>>", "").replace("<<<", "")
-        print(f"execute_string:{execute_string}")
         return eval(execute_string)
 
 
@@ -63,13 +61,15 @@ def main(schema: str):
                 extra_value = ''
             new_schema = new_schema.replace(variable, extra_value)
 
-        print(new_schema)
+        new_schema = new_schema.replace('\n', '').replace('        ','')
+        print(eval(new_schema))
     return 0
 
 
 if __name__ == '__main__':
     schema = """
     {
+        "id":"{{sample.id}}",
         "subject":{
             "alternate_ids":["{{sample.client}}", "{{sample.client_en}}", "{{sample.phone}}"],
             "date_of_birth":"{{sample.birth_date}}",
@@ -86,7 +86,58 @@ if __name__ == '__main__':
         "meta_data":{
             "created_by":">>>[f'Organization/{teacher[\"t_group\"]}' for teacher in self[\"teacher_copy\"] if teacher[\"t_no\"]=={{sample.t_no}}][0]<<<",
             "created":"{{sample.keyin_date}}",
-            "submitted_by":"Practitioner/{{sample.t_no}}"
+            "submitted_by":"Practitioner/{{sample.t_no}}",
+            "external_references":[
+                {
+                    "reference":"CONSENT:",
+                    "description": "Individual consent for research purpose."
+                } if '{{sample.permit}}' == 'Y' else None
+            ],
+            "priority":"urgent" if "{{sample.urgent_doc}}" == "是" else "routine",
+            "updates":[
+                {
+                    "timestamp":"1000-01-01",
+                    "comment":"CREATION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                } if "{{sample.keyin_date}}"=="0000-00-00" else {
+                    "timestamp":"{{sample.keyin_date}}",
+                    "comment":"CREATION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                },
+                {
+                    "timestamp":"1000-01-01",
+                    "comment":"MODIFICATION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                } if "{{sample.modify_date}}"=="0000-00-00" else {
+                    "timestamp":"{{sample.modify_date}}",
+                    "comment":"MODIFICATION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                },
+                {
+                    "timestamp":"1000-01-01",
+                    "comment":"COMPLETION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                } if "{{sample.check_date}}"=="0000-00-00" else {
+                    "timestamp":"{{sample.check_date}}",
+                    "comment":"COMPLETION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                },
+                {
+                    "timestamp":"1000-01-01",
+                    "comment":"READMISSION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                } if "{{sample.submit_date}}"=="0000-00-00" else {
+                    "timestamp":"{{sample.submit_date}}",
+                    "comment":"READMISSION:{{sample.id}}",
+                    "updated_by":"pause31@cgmmgb.onmicrosoft.com"
+                }
+            ],
+            "phenotypic_features": {
+                "description":">>>'單胞胎' if {{sample.fetus}} == '1' else "異卵雙胞" if  {{sample.fetus}} == '2' else '同卵雙胞' if {{sample.fetus}} == '3' else '多胞胎' if {{sample.fetus}} == '4' else '很多胞胎' if {{sample.fetus}} == '5' else ''<<<",
+                "type":{
+                    "id": "http://purl.bioontology.org/ontology/RCD/X75WE"
+                }
+            }
         }
     }
     """
