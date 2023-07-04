@@ -8,31 +8,20 @@ import os
 def argument():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--csv_dir", help="Add CSV Directory", type=str)
-    parser.add_argument("-o", "--output_json", help="Output json", type=str, default="data.json")
+    parser.add_argument("-o", "--output_json", help="Output json", type=str, default="output.json")
     return parser.parse_args()
 
 
 def csv_to_json(csv_file_path: str):
     with open(csv_file_path, 'r', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        data = [row for row in reader]
-    return data
+        for row in reader:
+            yield row
 
 
 def load_json(json_file_path, data):
     with open(json_file_path, 'w') as jsonfile:
         jsonfile.write(json.dumps(data, indent=4))
-
-
-def process_csv_files(csv_files):
-    json_data = {}
-    for csv_file_path in csv_files:
-        key = os.path.basename(csv_file_path).replace("hospital_atg_", "").replace(".csv", "")
-        print(f"csv to json: {key} 读取数据")
-        value = csv_to_json(csv_file_path)
-        json_data[key] = value
-        print(f"csv to json: {key} 转换完成")
-    return json_data
 
 
 def main():
@@ -41,20 +30,23 @@ def main():
     output_json = args.output_json
     assert csv_dir, "Argument csv_dir is required."
     assert os.path.isdir(csv_dir), "Enter a valid csv_dir path"
-    print("检查路径！")
+    print("檢查路徑！")
     csv_files = glob.glob(os.path.join(csv_dir, "*.csv"))
+    json_data = {}
+    for csv_file_path in csv_files:
+        key = os.path.basename(csv_file_path).replace("hospital_atg_", "").replace(".csv", "")
+        json_data[key] = []
+        print(f"csv to json: {key} 讀取資料")
+        value = next(csv_to_json(csv_file_path))
+        while value:
+            print(value)
+            json_data[key].append(value)
+            value = next(csv_to_json(csv_file_path))
 
-    batch_size = 1  # 每次处理的行数
-    start_index = 0
-    while start_index < len(csv_files):
-        batch_files = csv_files[start_index:start_index+batch_size]
-        json_data = process_csv_files(batch_files)
-        load_json(output_json, json_data)
-        start_index += batch_size
-
+        print(f"csv to json: {key} 轉換完成")
+    load_json(output_json, json_data)
     print("转换完成！")
 
 
 if __name__ == '__main__':
     main()
-    print("转换完成！")
