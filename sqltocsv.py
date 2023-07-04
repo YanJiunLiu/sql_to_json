@@ -58,6 +58,10 @@ if __name__ == '__main__':
 
     # 连接到MySQL数据库
     conn = mysql.connector.connect(**config)
+    if conn.is_connected():
+        print("MySQL连接成功")
+    else:
+        print("MySQL连接失败")
     cursor = conn.cursor()
     print(f"cursor數值 {cursor}")
     # 读取SQL文件并执行查询
