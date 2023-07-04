@@ -26,24 +26,37 @@ def load_json(json_file_path, data):
         jsonfile.write(json.dumps(data, indent=4))
 
 
+def process_csv_files(csv_files):
+    json_data = {}
+    for csv_file_path in csv_files:
+        key = os.path.basename(csv_file_path).replace("hospital_atg_", "").replace(".csv", "")
+        print(f"csv to json: {key} 读取数据")
+        value = csv_to_json(csv_file_path)
+        json_data[key] = value
+        print(f"csv to json: {key} 转换完成")
+    return json_data
+
+
 def main():
     args = argument()
     csv_dir = args.csv_dir
     output_json = args.output_json
     assert csv_dir, "Argument csv_dir is required."
     assert os.path.isdir(csv_dir), "Enter a valid csv_dir path"
-    print("檢查路徑！")
+    print("检查路径！")
     csv_files = glob.glob(os.path.join(csv_dir, "*.csv"))
-    json_data = {}
-    for csv_file_path in csv_files:
-        key = os.path.basename(csv_file_path).replace("hospital_atg_", "").replace(".csv", "")
-        print(f"csv to json: {key} 讀取資料")
-        value = csv_to_json(csv_file_path)
-        json_data[key] = value
-        print(f"csv to json: {key} 轉換完成")
-    load_json(output_json, json_data)
+
+    batch_size = 1000  # 每次处理的行数
+    start_index = 0
+    while start_index < len(csv_files):
+        batch_files = csv_files[start_index:start_index+batch_size]
+        json_data = process_csv_files(batch_files)
+        load_json(output_json, json_data)
+        start_index += batch_size
+
+    print("转换完成！")
 
 
 if __name__ == '__main__':
     main()
-    print("轉換完成！")
+    print("转换完成！")
