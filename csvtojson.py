@@ -32,13 +32,13 @@ def main():
     assert os.path.isdir(csv_dir), "Enter a valid csv_dir path"
     print("檢查路徑！")
     csv_files = glob.glob(os.path.join(csv_dir, "*.csv"))
-    for csv_file_path in csv_files:
+    with open(output_json, 'w') as jsonfile:
+        jsonfile.write("{\n")
+
+    for index, csv_file_path in enumerate(csv_files):
         key = os.path.basename(csv_file_path).replace("hospital_atg_", "").replace(".csv", "")
         print(f"csv to json: {key} 讀取資料")
-        json_file_path = f"json/{key}.json"
-
-        with open(json_file_path, 'a') as jsonfile:
-            jsonfile.write("{\n")
+        with open(output_json, 'a') as jsonfile:
             jsonfile.write(f"\t\"{key}\":[\n")
         tranform = csv_to_json(csv_file_path)
         value = next(tranform, None)
@@ -46,14 +46,20 @@ def main():
             tmp = value
             value = next(tranform, None)
             if value:
-                load_json(json_file_path, f"{tmp}")
+                load_json(output_json, f"{tmp}")
             else:
-                load_json(json_file_path, f"{tmp}", comma="")
-        with open(json_file_path, 'a') as jsonfile:
-            jsonfile.write("\t\n]")
-            jsonfile.write("\n}")
-
+                load_json(output_json, f"{tmp}", comma="")
+        with open(output_json, 'a') as jsonfile:
+            if index == len(csv_files)-1:
+                jsonfile.write("\t\n]")
+            else:
+                jsonfile.write("\t\n],")
         print(f"csv to json: {key} 轉換完成")
+
+    with open(output_json, 'a') as jsonfile:
+        jsonfile.write("\n}")
+
+
 
     print("转换完成！")
 
