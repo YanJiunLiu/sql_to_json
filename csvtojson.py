@@ -13,9 +13,10 @@ def argument():
 
 
 def csv_to_json(csv_file_path: str):
-    with open(csv_file_path, 'r', newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
+    with open(csv_file_path, 'r', newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(line.replace('\0','') for line in csvfile)
         for row in reader:
+            # print(row)
             yield row
 
 
@@ -50,7 +51,7 @@ def main():
             else:
                 load_json(output_json, f"{json.dumps(tmp)}", comma="")
         with open(output_json, 'a') as jsonfile:
-            if index == len(csv_files)-1:
+            if index == len(csv_files) - 1:
                 jsonfile.write("\t\n]")
             else:
                 jsonfile.write("\t\n],")
@@ -59,9 +60,8 @@ def main():
     with open(output_json, 'a') as jsonfile:
         jsonfile.write("\n}")
 
-
-
     print("转换完成！")
+    return 0
 
 
 if __name__ == '__main__':
