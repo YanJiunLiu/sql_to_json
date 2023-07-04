@@ -61,7 +61,7 @@ if __name__ == '__main__':
     if conn.is_connected():
         print("MySQL连接成功")
     else:
-        print("MySQL连接失败")
+        raise ConnectionError("MySQL连接失败")
     cursor = conn.cursor()
     print(f"cursor數值 {cursor}")
     # 读取SQL文件并执行查询
@@ -70,6 +70,8 @@ if __name__ == '__main__':
         cursor.execute(sql_script)
         rows = cursor.fetchall()
     print(f"读取SQL文件并执行查询")
+    print(f"cursor數值 {cursor}")
+    print(f"rows {rows}")
 
     # 获取查询结果的列名
     print(f"cursor.description {cursor.description}")
