@@ -68,6 +68,7 @@ if __name__ == '__main__':
     print(f"读取SQL文件并执行查询")
 
     # 获取查询结果的列名
+    print(f"cursor.description {cursor.description}")
     column_names = [desc[0] for desc in cursor.description]
     print(f"获取查询结果的列名 {column_names}")
     # 将数据写入CSV文件
