@@ -13,11 +13,9 @@ def argument():
 
 
 def csv_to_json(csv_file_path: str):
-    data = []
     with open(csv_file_path, 'r', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        for row in reader:
-            data.append(row)
+        data = [row for row in reader]
     return data
 
 
