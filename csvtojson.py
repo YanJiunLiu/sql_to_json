@@ -35,22 +35,23 @@ def main():
     for csv_file_path in csv_files:
         key = os.path.basename(csv_file_path).replace("hospital_atg_", "").replace(".csv", "")
         print(f"csv to json: {key} 讀取資料")
-
+        json_data = {
+            key: []
+        }
         json_file_path = f"json/{key}.json"
 
-        with open(json_file_path, 'a') as jsonfile:
-            jsonfile.write("{\n")
-            jsonfile.write(f"\t\"{key}\":[\n")
+        # with open(json_file_path, 'a') as jsonfile:
+        #     jsonfile.write("{\n")
+        #     jsonfile.write(f"\t\"{key}\":[\n")
         tranform = csv_to_json(csv_file_path)
         value = next(tranform, None)
         while value:
-            print(value)
-            load_json(json_file_path, value)
+            json_data[key].append(value)
             value = next(tranform, None)
-
-        with open(json_file_path, 'a') as jsonfile:
-            jsonfile.write("\n]")
-            jsonfile.write("\n}")
+        load_json(json_file_path, json_data)
+        # with open(json_file_path, 'a') as jsonfile:
+        #     jsonfile.write("\n]")
+        #     jsonfile.write("\n}")
 
         print(f"csv to json: {key} 轉換完成")
 
